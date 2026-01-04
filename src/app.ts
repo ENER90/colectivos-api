@@ -6,6 +6,8 @@ import {
   databaseHealthCheck,
 } from "./middlewares/database.middleware";
 import authRoutes from "./routes/auth.routes";
+import passengerRoutes from "./routes/passenger.routes";
+import driverRoutes from "./routes/driver.routes";
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/passengers", passengerRoutes);
+app.use("/api/drivers", driverRoutes);
 
 app.get("/health", (req, res) => {
   const dbStatus = getDatabaseStatus();
