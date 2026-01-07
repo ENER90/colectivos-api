@@ -78,6 +78,33 @@ export const markAsWaiting = async (
   }
 };
 
+export const getAllWaitingPassengers = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const passengers = await Passenger.find({}).limit(50);
+
+    const passengersData = passengers.map((p) => ({
+      id: p._id,
+      username: p.username,
+      location: {
+        latitude: p.location.coordinates[1],
+        longitude: p.location.coordinates[0],
+      },
+    }));
+
+    res.status(200).json({
+      message: "Waiting passengers retrieved successfully",
+      count: passengersData.length,
+      passengers: passengersData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const cancelWaiting = async (
   req: AuthenticatedRequest,
   res: Response,

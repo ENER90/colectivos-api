@@ -64,6 +64,35 @@ export const getNearbyPassengers = async (
   }
 };
 
+export const getAllActiveDrivers = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const drivers = await Driver.find({ status: "available" }).limit(50);
+
+    const driversData = drivers.map((d) => ({
+      id: d._id,
+      username: d.username,
+      location: {
+        latitude: d.location.coordinates[1],
+        longitude: d.location.coordinates[0],
+      },
+      availableSeats: d.availableSeats,
+      status: d.status,
+    }));
+
+    res.status(200).json({
+      message: "Active drivers retrieved successfully",
+      count: driversData.length,
+      drivers: driversData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateDriverStatus = async (
   req: AuthenticatedRequest,
   res: Response,
