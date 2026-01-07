@@ -1,83 +1,115 @@
-// Configuración específica de la Ruta Mapocho-Alameda-San Bernardo
-// Esta es la ruta principal que cubre ~20km desde el centro hacia el sur
+// Configuración específica de la Ruta REAL: Alameda → San Bernardo
+// Ruta: Alameda (Amunátegui) → Santo Domingo/Catedral → Manuel Rodríguez 
+// → Ruta 5 Sur (llenos) o Gran Avenida (buscando pasajeros) → San Bernardo Centro
 
 export interface RouteStop {
   name: string;
   coordinates: [number, number]; // [longitude, latitude]
   type: "terminal" | "major" | "minor";
   description: string;
+  routeType?: "autopista" | "calzada" | "both"; // Indica si está en ruta rápida o lenta
 }
 
-// Paraderos principales de la ruta (de norte a sur)
+// Paraderos principales de la ruta real (ordenados de norte a sur)
 export const ROUTE_STOPS: RouteStop[] = [
+  // INICIO: Alameda
   {
-    name: "Estación Mapocho",
-    coordinates: [-70.6567, -33.4269],
+    name: "Alameda con Amunátegui",
+    coordinates: [-70.6640, -33.4450],
     type: "terminal",
-    description: "Terminal norte - Estación Mapocho",
+    description: "Punto de partida - Alameda",
+    routeType: "both",
   },
   {
-    name: "Plaza Italia",
-    coordinates: [-70.6399, -33.4372],
+    name: "Santo Domingo / Catedral",
+    coordinates: [-70.6620, -33.4400],
     type: "major",
-    description: "Plaza Baquedano / Plaza Italia",
+    description: "Cruce para tomar Manuel Rodríguez",
+    routeType: "both",
   },
   {
-    name: "República",
-    coordinates: [-70.6529, -33.4500],
+    name: "Manuel Rodríguez (inicio)",
+    coordinates: [-70.6610, -33.4480],
     type: "major",
-    description: "Alameda con República",
+    description: "Manuel Rodríguez hacia el sur",
+    routeType: "both",
   },
   {
-    name: "Estación Central",
-    coordinates: [-70.6783, -33.4569],
+    name: "Manuel Rodríguez con Bascuñán Guerrero",
+    coordinates: [-70.6590, -33.4620],
+    type: "minor",
+    description: "Manuel Rodríguez sur",
+    routeType: "both",
+  },
+  
+  // BIFURCACIÓN: Ruta 5 Sur (si van llenos)
+  {
+    name: "Entrada Ruta 5 Sur",
+    coordinates: [-70.6650, -33.4850],
     type: "major",
-    description: "Estación Central de Trenes",
+    description: "Autopista - Solo si van llenos",
+    routeType: "autopista",
   },
   {
-    name: "Lo Ovalle",
-    coordinates: [-70.6850, -33.4750],
+    name: "Ruta 5 Sur - Salida Lo Espejo",
+    coordinates: [-70.6750, -33.5200],
+    type: "minor",
+    description: "Primera salida hacia San Bernardo",
+    routeType: "autopista",
+  },
+  {
+    name: "Ruta 5 Sur - Salida San Bernardo",
+    coordinates: [-70.6850, -33.5850],
     type: "major",
-    description: "Entrada Autopista Central",
+    description: "Salida principal San Bernardo",
+    routeType: "autopista",
   },
+  
+  // RUTA ALTERNATIVA: Gran Avenida (si buscan pasajeros)
   {
-    name: "Gran Avenida",
-    coordinates: [-70.6830, -33.5100],
+    name: "Gran Avenida - La Cisterna",
+    coordinates: [-70.6620, -33.5300],
     type: "major",
-    description: "Gran Avenida - San Miguel",
+    description: "Gran Avenida (ruta lenta)",
+    routeType: "calzada",
   },
   {
-    name: "El Parrón",
-    coordinates: [-70.6900, -33.5400],
+    name: "Gran Avenida - El Bosque",
+    coordinates: [-70.6700, -33.5550],
+    type: "minor",
+    description: "Gran Avenida sur",
+    routeType: "calzada",
+  },
+  {
+    name: "Avenida Portales de la Reina",
+    coordinates: [-70.6800, -33.5800],
     type: "major",
-    description: "El Parrón - La Cisterna",
+    description: "Entrada a San Bernardo",
+    routeType: "calzada",
   },
+  
+  // DESTINO FINAL
   {
-    name: "La Portada",
-    coordinates: [-70.6950, -33.5700],
-    type: "major",
-    description: "La Portada - San Bernardo",
-  },
-  {
-    name: "Plaza San Bernardo",
+    name: "Centro de San Bernardo",
     coordinates: [-70.7000, -33.5950],
     type: "terminal",
-    description: "Terminal sur - Plaza de San Bernardo",
+    description: "Plaza de San Bernardo - Destino final",
+    routeType: "both",
   },
 ];
 
-// Límites del mapa (bounding box) para la ruta
+// Límites del mapa (bounding box) para la ruta REAL
 export const ROUTE_BOUNDS = {
-  north: -33.42, // Un poco al norte de Mapocho
-  south: -33.62, // Un poco al sur de San Bernardo
-  west: -70.75,
-  east: -70.62,
+  north: -33.43, // Alameda
+  south: -33.61, // San Bernardo
+  west: -70.71,
+  east: -70.65,
 };
 
-// Centro del mapa (punto medio aproximado)
+// Centro del mapa (punto medio real de la ruta)
 export const ROUTE_CENTER = {
-  latitude: -33.51,
-  longitude: -70.68,
+  latitude: -33.52,
+  longitude: -70.67,
 };
 
 // Distancia máxima permitida desde la ruta (en metros)
@@ -96,15 +128,18 @@ export const MAP_CONFIG = {
   ] as [[number, number], [number, number]],
 };
 
-// Información de la ruta
+// Información de la ruta REAL
 export const ROUTE_INFO = {
-  name: "Mapocho - Alameda - San Bernardo",
-  code: "501", // Código típico de colectivos en esta ruta
-  distance: "20 km",
-  duration: "30-45 min",
-  via: "Alameda, Autopista Central",
+  name: "Alameda - San Bernardo",
+  code: "501", 
+  distance: "18 km",
+  durationFast: "25-30 min", // Por Ruta 5 (llenos)
+  durationSlow: "40-50 min", // Por Gran Avenida (buscando pasajeros)
+  viaFast: "Manuel Rodríguez → Ruta 5 Sur",
+  viaSlow: "Manuel Rodríguez → Gran Avenida",
   fare: 800, // Tarifa aproximada en pesos chilenos
-  capacity: 4, // Típicamente 4 pasajeros por colectivo
+  capacity: 4, // 4 pasajeros por colectivo
+  description: "Sale de Alameda por Amunátegui, dobla en Santo Domingo/Catedral, toma Manuel Rodríguez. Si va lleno → Ruta 5 Sur (rápido). Si busca pasajeros → Gran Avenida (lento).",
 };
 
 // Helper: Verificar si una ubicación está dentro de los límites de la ruta

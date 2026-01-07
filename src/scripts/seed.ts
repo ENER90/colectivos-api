@@ -66,14 +66,14 @@ const seedData = async () => {
     }
     console.log(`✅ ${createdPassengerUsers.length} pasajeros creados`);
 
-    // Crear pasajeros esperando en la Ruta Mapocho-Alameda-San Bernardo
+    // Crear pasajeros esperando en la Ruta REAL: Alameda → San Bernardo
     const waitingPassengers = [
       {
         userId: createdPassengerUsers[0]._id,
         username: createdPassengerUsers[0].username,
         location: {
           type: "Point",
-          coordinates: [-70.6567, -33.4269], // Estación Mapocho
+          coordinates: [-70.664, -33.445], // Alameda con Amunátegui (inicio)
         },
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutos
@@ -83,7 +83,7 @@ const seedData = async () => {
         username: createdPassengerUsers[1].username,
         location: {
           type: "Point",
-          coordinates: [-70.6529, -33.45], // República (Alameda)
+          coordinates: [-70.661, -33.448], // Manuel Rodríguez (inicio)
         },
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 30 * 60 * 1000),
@@ -93,7 +93,7 @@ const seedData = async () => {
         username: createdPassengerUsers[2].username,
         location: {
           type: "Point",
-          coordinates: [-70.6783, -33.4569], // Estación Central
+          coordinates: [-70.662, -33.53], // Gran Avenida - La Cisterna
         },
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 30 * 60 * 1000),
@@ -103,7 +103,7 @@ const seedData = async () => {
         username: createdPassengerUsers[3].username,
         location: {
           type: "Point",
-          coordinates: [-70.69, -33.54], // El Parrón
+          coordinates: [-70.68, -33.58], // Portales de la Reina (cerca de San Bernardo)
         },
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 30 * 60 * 1000),
@@ -166,16 +166,16 @@ const seedData = async () => {
     }
     console.log(`✅ ${createdDriverUsers.length} conductores creados`);
 
-    // Crear conductores activos en la Ruta Mapocho-Alameda-San Bernardo
+    // Crear conductores activos en diferentes puntos de la ruta REAL
     const activeDrivers = [
       {
         userId: createdDriverUsers[0]._id,
         username: createdDriverUsers[0].username,
         location: {
           type: "Point",
-          coordinates: [-70.6399, -33.4372], // Plaza Italia
+          coordinates: [-70.662, -33.44], // Santo Domingo/Catedral (recién salió)
         },
-        availableSeats: 3,
+        availableSeats: 1, // Casi lleno, irá por Ruta 5
         status: "available" as const,
       },
       {
@@ -183,9 +183,9 @@ const seedData = async () => {
         username: createdDriverUsers[1].username,
         location: {
           type: "Point",
-          coordinates: [-70.685, -33.475], // Lo Ovalle (entrada Autopista)
+          coordinates: [-70.675, -33.52], // Ruta 5 Sur (va por autopista)
         },
-        availableSeats: 4,
+        availableSeats: 0, // Lleno, en ruta rápida
         status: "available" as const,
       },
       {
@@ -193,9 +193,9 @@ const seedData = async () => {
         username: createdDriverUsers[2].username,
         location: {
           type: "Point",
-          coordinates: [-70.683, -33.51], // Gran Avenida
+          coordinates: [-70.659, -33.462], // Manuel Rodríguez (buscando pasajeros)
         },
-        availableSeats: 2,
+        availableSeats: 3, // Vacío, irá por Gran Avenida
         status: "available" as const,
       },
       {
@@ -203,9 +203,9 @@ const seedData = async () => {
         username: createdDriverUsers[3].username,
         location: {
           type: "Point",
-          coordinates: [-70.695, -33.57], // La Portada
+          coordinates: [-70.67, -33.555], // Gran Avenida (ruta lenta, buscando)
         },
-        availableSeats: 4,
+        availableSeats: 2, // Semi-vacío, en ruta lenta
         status: "available" as const,
       },
     ];
@@ -214,7 +214,7 @@ const seedData = async () => {
     console.log(`🚖 ${createdActiveDrivers.length} conductores activos`);
 
     console.log("\n✨ Seed completado exitosamente!");
-    console.log("\n🚖 RUTA: Mapocho → Alameda → San Bernardo");
+    console.log("\n🚖 RUTA REAL: Alameda → San Bernardo (Colectivo 501)");
     console.log("\n📋 Resumen:");
     console.log(`   - ${createdPassengerUsers.length} usuarios pasajeros`);
     console.log(
@@ -227,12 +227,13 @@ const seedData = async () => {
     console.log("\n🔑 Credenciales de prueba:");
     console.log("   Email: pasajero1@test.com / conductor1@test.com");
     console.log("   Password: 123456");
-    console.log("\n📍 Paraderos principales:");
-    console.log("   - Estación Mapocho (terminal norte)");
-    console.log("   - Plaza Italia / República (Alameda)");
-    console.log("   - Estación Central");
-    console.log("   - Autopista Central (Lo Ovalle, Gran Avenida)");
-    console.log("   - San Bernardo (terminal sur)");
+    console.log("\n📍 Recorrido REAL:");
+    console.log("   1. Alameda con Amunátegui (salida)");
+    console.log("   2. Doblan en Santo Domingo o Catedral");
+    console.log("   3. Toman Manuel Rodríguez hacia el sur");
+    console.log("   4. SI VAN LLENOS → Ruta 5 Sur (rápido, 25-30 min)");
+    console.log("   5. SI BUSCAN PASAJEROS → Gran Avenida (lento, 40-50 min)");
+    console.log("   6. Centro de San Bernardo (llegada)");
 
     await mongoose.disconnect();
     console.log("\n👋 Desconectado de MongoDB");
