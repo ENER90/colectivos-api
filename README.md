@@ -49,32 +49,36 @@ GET    /api/auth/me          - Get profile (auth)
 ### Passengers
 
 ```
-POST   /api/passengers/waiting    - Mark as waiting (auth)
-GET    /api/passengers/nearby     - Get nearby waiting passengers (auth, driver)
-DELETE /api/passengers/cancel     - Cancel waiting status (auth)
+POST   /api/passengers/waiting    - Mark as waiting (auth, passenger)
+DELETE /api/passengers/waiting    - Cancel waiting status (auth, passenger)
 ```
 
 ### Drivers
 
 ```
-PUT    /api/drivers/location      - Update location (auth, driver)
-PUT    /api/drivers/seats         - Update available seats (auth, driver)
-GET    /api/drivers/status        - Get driver status (auth)
+GET    /api/drivers/nearby-passengers  - Get nearby waiting passengers (auth, driver)
+PUT    /api/drivers/status             - Update location & status (auth, driver)
 ```
 
 ## 🔌 WebSocket Events
 
-### Client → Server
+Real-time communication via Socket.io. See [SOCKET_EVENTS.md](./SOCKET_EVENTS.md) for detailed documentation.
 
-- `passenger:waiting` - Passenger marks as waiting
-- `driver:location` - Driver updates location
-- `driver:seats` - Driver updates available seats
+### Driver Events
 
-### Server → Client
+- `driver:location-update` → Update location & available seats
+- `driver:inactive` → Set driver as inactive
 
-- `passengers:update` - New passenger waiting nearby
-- `passenger:picked_up` - Passenger was picked up
-- `driver:nearby` - Driver approaching
+### Passenger Events
+
+- `passenger:waiting` → Mark as waiting at location
+- `passenger:cancel` → Cancel waiting status
+
+### Broadcast Events
+
+- `driver:location-updated` → Broadcast to all passengers
+- `passenger:new-waiting` → Broadcast to all drivers
+- `passenger:cancelled` → Broadcast to all drivers
 
 ## 📖 License
 

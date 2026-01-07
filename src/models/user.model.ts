@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: "passenger" | "driver" | "admin";
+  status: "online" | "offline";
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -39,6 +40,11 @@ const userSchema = new Schema<IUser>(
       type: String,
       enum: ["passenger", "driver", "admin"],
       default: "passenger",
+    },
+    status: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
     },
   },
   {
